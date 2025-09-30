@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: taskmanager-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: taskmanager
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - taskmanager-data:/var/lib/mysql
+    networks:
+      - flask-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask-task-manager-app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+      MYSQL_DB: taskmanager
+      FLASK_APP: app.py
+      FLASK_ENV: development
+    ports:
+      - "5000:5000"
+    networks:
+      - flask-net
+    command: >
+      sh -c "python init_db.py && flask run --host=0.0.0.0"
+
+volumes:
+  taskmanager-data:
+
+networks:
+  flask-net:
+    driver: bridge
