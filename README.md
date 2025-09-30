@@ -18,6 +18,10 @@ A simple web-based task manager built with Flask. Users can create, edit, and ma
 - PyMySQL
 - Bootstrap 5
 
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![Docker](https://img.shields.io/badge/docker-ready-green)
+  
+
 ## Environment Variables
 Set the following environment variables (or use the defaults in `config.py`):
 
@@ -45,7 +49,24 @@ The app will be available at [http://localhost:5000](http://localhost:5000).
 
 *The database will be initialized automatically on first run.*
 
-### 3. Local Development (without Docker)
+### 3. Run via Docker Hub
+
+You can run the app directly from Docker Hub without cloning the repo:
+
+```bash
+docker pull tara00/flask-task-manager:latest
+
+docker run -d -p 5000:5000 \
+  --name flask-task-manager \
+  -e MYSQL_USER=user \
+  -e MYSQL_PASSWORD=userpassword \
+  -e MYSQL_HOST=db \
+  -e MYSQL_DB=taskmanager \
+  tara00/flask-task-manager:latest
+```
+Access the app at http://localhost:5000
+
+### 4. Local Development (without Docker)
 1. (Optional) Create and activate a virtual environment:
   ```bash
   python3 -m venv venv
@@ -86,6 +107,16 @@ templates/            # HTML templates
   index.html
   edit_task.html
 ```
+## 📬 Contact
+
+**Author:** Tara Choudhary  
+
+**GitHub:** [Tara-Choudhary](https://github.com/Tara-Choudhary)  
+
+**LinkedIn:** [Tara Choudhary](https://www.linkedin.com/in/tara-choudhary00/)  
+
+**Email:** developer.tarachoudhary@gmail.com
+
 
 ## License
 This project is licensed under the MIT License.
